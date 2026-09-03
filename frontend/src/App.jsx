@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+// RecoverAI production backend
 const API = "https://recoverai-zzx4.onrender.com";
 
 function App() {
@@ -9,12 +10,16 @@ function App() {
 
   const [paymentId, setPaymentId] = useState("DEMO_FRONTEND_001");
   const [amount, setAmount] = useState(5000);
+
   const [recoveryResult, setRecoveryResult] = useState(null);
   const [testing, setTesting] = useState(false);
   const [error, setError] = useState("");
 
+  // Load dashboard metrics
   const loadMetrics = async () => {
     try {
+      setError("");
+
       const response = await fetch(`${API}/api/metrics`);
 
       if (!response.ok) {
@@ -22,16 +27,19 @@ function App() {
       }
 
       const data = await response.json();
+
       setMetrics(data);
-      setError("");
     } catch (err) {
       console.error("Failed to load metrics:", err);
-      setError("Unable to connect to RecoverAI backend.");
+      setError(
+        "Unable to connect to RecoverAI backend. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  // Test AI recovery
   const testRecovery = async () => {
     setTesting(true);
     setError("");
@@ -73,10 +81,14 @@ function App() {
 
       setRecoveryResult(data);
 
+      // Refresh dashboard metrics
       await loadMetrics();
     } catch (err) {
       console.error("Recovery test failed:", err);
-      setError("Recovery request failed. Check that RecoverAI backend is running.");
+
+      setError(
+        "Recovery request failed. Please check the RecoverAI backend."
+      );
     } finally {
       setTesting(false);
     }
@@ -86,17 +98,26 @@ function App() {
     loadMetrics();
   }, []);
 
+  // Loading screen
   if (loading) {
-    return <div className="loading">Loading RecoverAI...</div>;
+    return (
+      <div className="loading">
+        Loading RecoverAI...
+      </div>
+    );
   }
 
   return (
     <div className="app">
 
+      {/* HEADER */}
       <header className="header">
         <div>
           <h1>RecoverAI</h1>
-          <p>Autonomous Revenue Recovery & Payment Intelligence</p>
+
+          <p>
+            Autonomous Revenue Recovery & Payment Intelligence
+          </p>
         </div>
 
         <div className="status">
@@ -107,30 +128,39 @@ function App() {
 
       <main>
 
+        {/* HERO */}
         <section className="hero">
+
           <div>
-            <h2>Revenue Recovery Command Center</h2>
+            <h2>
+              Revenue Recovery Command Center
+            </h2>
+
             <p>
-              AI-driven detection, decisioning, guardrails and recovery
-              execution.
+              AI-driven detection, decisioning, guardrails
+              and recovery execution.
             </p>
           </div>
 
           <button onClick={loadMetrics}>
             Refresh Metrics
           </button>
+
         </section>
 
+        {/* ERROR */}
         {error && (
           <div className="error-message">
             {error}
           </div>
         )}
 
+        {/* METRIC CARDS */}
         <section className="cards">
 
           <div className="card">
             <span>Total Payments</span>
+
             <strong>
               {metrics?.total_payments ?? 0}
             </strong>
@@ -138,20 +168,27 @@ function App() {
 
           <div className="card">
             <span>Revenue at Risk</span>
+
             <strong>
-              ₹{(metrics?.revenue_at_risk ?? 0).toLocaleString()}
+              ₹{Number(
+                metrics?.revenue_at_risk ?? 0
+              ).toLocaleString()}
             </strong>
           </div>
 
           <div className="card">
             <span>Expected Recovery</span>
+
             <strong>
-              ₹{(metrics?.expected_recovery ?? 0).toLocaleString()}
+              ₹{Number(
+                metrics?.expected_recovery ?? 0
+              ).toLocaleString()}
             </strong>
           </div>
 
           <div className="card">
             <span>Recovery Rate</span>
+
             <strong>
               {metrics?.expected_recovery_rate ?? 0}%
             </strong>
@@ -159,35 +196,56 @@ function App() {
 
         </section>
 
+        {/* PERFORMANCE + PIPELINE */}
         <section className="grid">
 
+          {/* AGENT PERFORMANCE */}
           <div className="panel">
-            <h3>Agent Performance</h3>
+
+            <h3>
+              Agent Performance
+            </h3>
 
             <div className="metric-row">
-              <span>Approved Actions</span>
+              <span>
+                Approved Actions
+              </span>
+
               <b>
                 {metrics?.approved_actions ?? 0}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Blocked Actions</span>
+              <span>
+                Blocked Actions
+              </span>
+
               <b>
                 {metrics?.blocked_actions ?? 0}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Actual Recovered</span>
+              <span>
+                Actual Recovered
+              </span>
+
               <b>
-                ₹{(metrics?.actual_recovered ?? 0).toLocaleString()}
+                ₹{Number(
+                  metrics?.actual_recovered ?? 0
+                ).toLocaleString()}
               </b>
             </div>
+
           </div>
 
+          {/* RECOVERY PIPELINE */}
           <div className="panel">
-            <h3>Recovery Pipeline</h3>
+
+            <h3>
+              Recovery Pipeline
+            </h3>
 
             <div className="pipeline">
 
@@ -212,91 +270,144 @@ function App() {
               </div>
 
             </div>
+
           </div>
 
         </section>
 
+        {/* TEST RECOVERY */}
         <section className="panel">
 
-          <h3>Test Recovery Agent</h3>
+          <h3>
+            Test Recovery Agent
+          </h3>
 
           <div className="metric-row">
-            <span>Payment ID</span>
+
+            <span>
+              Payment ID
+            </span>
 
             <input
               value={paymentId}
-              onChange={(e) => setPaymentId(e.target.value)}
+              onChange={(e) =>
+                setPaymentId(e.target.value)
+              }
+              placeholder="Enter payment ID"
             />
+
           </div>
 
           <div className="metric-row">
-            <span>Payment Amount</span>
+
+            <span>
+              Payment Amount
+            </span>
 
             <input
               type="number"
+              min="1"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) =>
+                setAmount(e.target.value)
+              }
+              placeholder="Enter amount"
             />
+
           </div>
 
           <button
             onClick={testRecovery}
             disabled={testing}
           >
-            {testing ? "Running AI Recovery..." : "Run Recovery Test"}
+            {testing
+              ? "Running AI Recovery..."
+              : "Run Recovery Test"}
           </button>
 
         </section>
 
+        {/* AI RESULT */}
         {recoveryResult && (
           <section className="panel">
 
-            <h3>AI Recovery Decision</h3>
+            <h3>
+              AI Recovery Decision
+            </h3>
 
             <div className="metric-row">
-              <span>Payment ID</span>
-              <b>{recoveryResult.payment_id}</b>
-            </div>
+              <span>
+                Payment ID
+              </span>
 
-            <div className="metric-row">
-              <span>Recovery Probability</span>
               <b>
-                {(recoveryResult.recovery_probability * 100).toFixed(2)}%
+                {recoveryResult.payment_id ?? "-"}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Recommended Action</span>
+              <span>
+                Recovery Probability
+              </span>
+
               <b>
-                {recoveryResult.recommended_action}
+                {typeof recoveryResult.recovery_probability ===
+                "number"
+                  ? (
+                      recoveryResult.recovery_probability * 100
+                    ).toFixed(2)
+                  : "0.00"}
+                %
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Final Action</span>
+              <span>
+                Recommended Action
+              </span>
+
               <b>
-                {recoveryResult.final_action}
+                {recoveryResult.recommended_action ?? "-"}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Decision Status</span>
+              <span>
+                Final Action
+              </span>
+
               <b>
-                {recoveryResult.status}
+                {recoveryResult.final_action ?? "-"}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Execution Status</span>
+              <span>
+                Decision Status
+              </span>
+
               <b>
-                {recoveryResult.execution?.status}
+                {recoveryResult.status ?? "-"}
               </b>
             </div>
 
             <div className="metric-row">
-              <span>Expected Recovery Value</span>
+              <span>
+                Execution Status
+              </span>
+
               <b>
-                ₹{(
+                {recoveryResult.execution?.status ?? "-"}
+              </b>
+            </div>
+
+            <div className="metric-row">
+              <span>
+                Expected Recovery Value
+              </span>
+
+              <b>
+                ₹{Number(
                   recoveryResult.expected_recovery_value ?? 0
                 ).toLocaleString()}
               </b>
@@ -305,18 +416,23 @@ function App() {
           </section>
         )}
 
+        {/* FOOTER */}
         <section className="footer-panel">
 
-          <h3>RecoverAI Intelligence</h3>
+          <h3>
+            RecoverAI Intelligence
+          </h3>
 
           <p>
-            Every recovery decision is evaluated by ML, checked against
-            safety guardrails and recorded through an audit trail.
+            Every recovery decision is evaluated by ML,
+            checked against safety guardrails and recorded
+            through an audit trail.
           </p>
 
         </section>
 
       </main>
+
     </div>
   );
 }
