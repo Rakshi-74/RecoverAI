@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://recoverai-zzx4.onrender.com";
 
 function App() {
   const [metrics, setMetrics] = useState(null);
@@ -23,6 +23,7 @@ function App() {
 
       const data = await response.json();
       setMetrics(data);
+      setError("");
     } catch (err) {
       console.error("Failed to load metrics:", err);
       setError("Unable to connect to RecoverAI backend.");
@@ -75,7 +76,7 @@ function App() {
       await loadMetrics();
     } catch (err) {
       console.error("Recovery test failed:", err);
-      setError("Recovery request failed. Check that FastAPI is running.");
+      setError("Recovery request failed. Check that RecoverAI backend is running.");
     } finally {
       setTesting(false);
     }
@@ -189,6 +190,7 @@ function App() {
             <h3>Recovery Pipeline</h3>
 
             <div className="pipeline">
+
               <div>
                 01 <span>Payment Failure</span>
               </div>
@@ -208,6 +210,7 @@ function App() {
               <div>
                 05 <span>Recovery Action</span>
               </div>
+
             </div>
           </div>
 
