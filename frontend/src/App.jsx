@@ -31,6 +31,7 @@ function App() {
       setMetrics(data);
     } catch (err) {
       console.error("Failed to load metrics:", err);
+
       setError(
         "Unable to connect to RecoverAI backend. Please try again."
       );
@@ -78,6 +79,10 @@ function App() {
       }
 
       const data = await response.json();
+
+      if (data.status === "ERROR") {
+        throw new Error(data.error || "Recovery API returned an error");
+      }
 
       setRecoveryResult(data);
 
@@ -130,7 +135,6 @@ function App() {
 
         {/* HERO */}
         <section className="hero">
-
           <div>
             <h2>
               Revenue Recovery Command Center
@@ -145,7 +149,6 @@ function App() {
           <button onClick={loadMetrics}>
             Refresh Metrics
           </button>
-
         </section>
 
         {/* ERROR */}
@@ -351,8 +354,7 @@ function App() {
               </span>
 
               <b>
-                {typeof recoveryResult.recovery_probability ===
-                "number"
+                {typeof recoveryResult.recovery_probability === "number"
                   ? (
                       recoveryResult.recovery_probability * 100
                     ).toFixed(2)
