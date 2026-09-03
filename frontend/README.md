@@ -1,16 +1,50 @@
-# React + Vite
+# RecoverAI
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Autonomous Revenue Recovery & Payment Intelligence
 
-Currently, two official plugins are available:
+RecoverAI is an AI-driven revenue recovery system designed to detect payment failures, predict recovery probability, apply decision-making logic, enforce safety guardrails, and execute simulated recovery actions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Payment failure detection
+- ML-based recovery probability prediction
+- AI decision engine
+- Safety guardrails
+- Automated recovery action recommendation
+- Recovery metrics dashboard
+- Audit trail
+- Razorpay webhook integration
+- FastAPI backend
+- React frontend
+- SQLite database
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Architecture
 
-## Expanding the Oxlint configuration
+Payment Failure
+→ AI Risk Prediction
+→ Decision Engine
+→ Guardrail Check
+→ Recovery Action
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Tech Stack
+
+- Python
+- FastAPI
+- SQLAlchemy
+- SQLite
+- React
+- Vite
+- JavaScript
+- Machine Learning
+- Razorpay API
+
+## Project Structure
+
+```text
+RecoverAI/
+├── backend/
+├── frontend/
+├── ml/
+├── scripts/
+├── ml_dataset.csv
+└── recoverai.db
